@@ -7,6 +7,7 @@ enum stateDragon {
 	FIRE_DOWN_NORMAL,
 	FIRE_DOWN_SKILL,
 	FLY,
+	STOP,
 	D_DIE
 };
 
@@ -19,7 +20,9 @@ private:
 	Animate* animateFireUp;
 	Animate* animateFireDownNormal;
 	Animate* animateFireDownSkill;
+	Animate* animateJump;
 	Animate* animateFly;
+	Animate* animateStop;
 	Animate* animateDie;
 	int  currentState;
 public:
@@ -31,6 +34,7 @@ public:
 	void fireDownNormal();
 	void fireDownSkill();
 	void fly();
+	void stop();
 	void die();
 	Dragon(Layer* layer);
 	~Dragon();

@@ -62,19 +62,25 @@ void Dragon::Init()
 	aniFireSkill.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fireDown_2_4.png"));
 	aniFireSkill.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fireDown_2_5.png"));
 
+	// jump
+	Vector<SpriteFrame*> aniJump;
+	aniJump.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_1.png"));
+	aniJump.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_2.png"));
+	aniJump.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_3.png"));
+
 	// fly
 	Vector<SpriteFrame*> aniFly;
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_1.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_2.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_3.png"));
 	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_4.png"));
 	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_5.png"));
 	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_6.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_7.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_8.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_9.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_10.png"));
-	aniFly.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_11.png"));
+
+	// stop
+	Vector<SpriteFrame*> aniStop;
+	aniStop.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_7.png"));
+	aniStop.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_8.png"));
+	aniStop.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_9.png"));
+	aniStop.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_10.png"));
+	aniStop.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fly_11.png"));
 
 	// die
 	Vector<SpriteFrame*> aniDie;
@@ -97,8 +103,12 @@ void Dragon::Init()
 	animateFireDownNormal = Animate::create(animation);
 	animation = Animation::createWithSpriteFrames(aniFireSkill, 0.2f);
 	animateFireDownSkill = Animate::create(animation);
+	animation = Animation::createWithSpriteFrames(aniJump, 0.2f);
+	animateJump = Animate::create(animation);
 	animation = Animation::createWithSpriteFrames(aniFly, 0.2f);
 	animateFly = Animate::create(animation);
+	animation = Animation::createWithSpriteFrames(aniStop, 0.2f);
+	animateStop = Animate::create(animation);
 	animation = Animation::createWithSpriteFrames(aniDie, 0.2f);
 	animateDie = Animate::create(animation);
 
@@ -107,7 +117,9 @@ void Dragon::Init()
 	animateFireUp->retain();
 	animateFireDownNormal->retain();
 	animateFireDownSkill->retain();
+	animateJump->retain();
 	animateFly->retain();
+	animateStop->retain();
 	animateDie->retain();
 }
 
@@ -162,10 +174,18 @@ void Dragon::setState(int nextState)
 	case stateDragon::FLY: {
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
-			this->getSprite()->runAction(animateFly);
+			auto sequence = Sequence::create(animateJump, animateFly, nullptr);
+			this->getSprite()->runAction(sequence);
 		}
 		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
 			this->getSprite()->runAction(animateFly);
+		}
+		break;
+	}
+	case stateDragon::STOP: {
+		if (nextState != currentState) {
+			this->getSprite()->stopAllActions();
+			this->getSprite()->runAction(animateStop);
 		}
 		break;
 	}
@@ -209,6 +229,11 @@ void Dragon::fireDownSkill()
 void Dragon::fly()
 {
 	setState(stateDragon::FLY);
+}
+
+void Dragon::stop()
+{
+	setState(stateDragon::STOP);
 }
 
 void Dragon::die()

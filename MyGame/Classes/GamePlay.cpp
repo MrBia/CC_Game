@@ -18,7 +18,7 @@ bool GamePlay::init()
 	}
 
 	// create edge
-	createEdge();
+	//createEdge();
 
 	// create map
 	createMap();
@@ -42,7 +42,7 @@ void GamePlay::update(float deltaTime)
 	setViewPointCenter(main->getSprite()->getPosition());
 	UpdateJoystick(deltaTime);
 	((Zombie*)(zombie))->normalFight();
-	((Dragon*)(dragon))->fly();
+	((Dragon*)(dragon))->die();
 }
 
 void GamePlay::createMap()
