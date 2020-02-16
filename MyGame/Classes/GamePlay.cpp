@@ -39,7 +39,7 @@ bool GamePlay::init()
 
 void GamePlay::update(float deltaTime)
 {
-	setViewPointCenter(main->getSprite()->getPosition());
+	setViewPointCenter(knight->getSprite()->getPosition());
 	UpdateJoystick(deltaTime);
 	((Zombie*)(zombie))->normalFight();
 	((Dragon*)(dragon))->die();
@@ -49,17 +49,39 @@ void GamePlay::createMap()
 {
 	_tileMap = new CCTMXTiledMap();
 	_tileMap->initWithTMXFile("Map/map_2.tmx");
-	
+	_objectGroup = _tileMap->getObjectGroup("Object");
 	this->addChild(_tileMap);
 }
 
 void GamePlay::createObject()
 {
-	main = new Knight(this);
+	/*knight = new Knight(this);
 	zombie = new Zombie(this);
 	dragon = new Dragon(this);
 	((Zombie*)(zombie))->normalFight();
-	((Knight*)(main))->start();
+	((Knight*)(main))->start();*/
+
+	auto objects = _objectGroup->getObjects();
+	for (int i = 0; i < objects.size(); i++) {
+		auto object = objects.at(i);
+		auto properties = object.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object.asValueMap().at("type").asInt();
+
+		if (type == 1) {
+			knight = new Knight(this); 
+			knight->getSprite()->setPosition(Vec2(posX, posY));
+		}
+		else if (type == 2) {
+			dragon = new Dragon(this);
+			dragon->getSprite()->setPosition(Vec2(posX, posY));
+		}
+		else if (type == 3) {
+			zombie = new Zombie(this);
+			zombie->getSprite()->setPosition(Vec2(posX, posY));
+		}
+	}
 }
 
 void GamePlay::setViewPointCenter(CCPoint position)
@@ -82,24 +104,24 @@ void GamePlay::OnKeyPressed(EventKeyboard::KeyCode keyCode, Event * event)
 	{
 	case EventKeyboard::KeyCode::KEY_A:
 	{
-		main->getSprite()->getPhysicsBody()->setVelocity(-Vec2(150, 0));
-		main->getSprite()->setFlippedX(true);
+		knight->getSprite()->getPhysicsBody()->setVelocity(-Vec2(150, 0));
+		knight->getSprite()->setFlippedX(true);
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_D:
 	{
-		main->getSprite()->getPhysicsBody()->setVelocity(Vec2(150, 0));
-		main->getSprite()->setFlippedX(false);
+		knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(150, 0));
+		knight->getSprite()->setFlippedX(false);
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_W:
 	{
-		main->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 150));
+		knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 150));
 		break;
 	}
 	case EventKeyboard::KeyCode::KEY_S:
 	{
-		main->getSprite()->getPhysicsBody()->setVelocity(-Vec2(0, 150));
+		knight->getSprite()->getPhysicsBody()->setVelocity(-Vec2(0, 150));
 		break;
 	}
 	default:
@@ -131,7 +153,7 @@ void GamePlay::createEdge()
 
 void GamePlay::Fight(Ref* sender, Widget::TouchEventType type) // co tham so ham CALLBACK ko loi
 {
-	((Knight*)(main))->fight();
+	((Knight*)(knight))->fight();
 }
 
 void GamePlay::createJoystick(Layer* layer)
@@ -183,31 +205,31 @@ void GamePlay::UpdateJoystick(float dt)
 		float degree = std::atan2f(pos.y, pos.x) * 180 / 3.141593;
 		if (degree > 135 && degree < 180 || degree > -180 && degree < -135)//MoveLeft
 		{
-			main->getSprite()->getPhysicsBody()->setVelocity(-Vec2(SPEED_GO, 0));
-			main->getSprite()->setFlippedX(true);
-			((Knight*)(main))->go();
+			knight->getSprite()->getPhysicsBody()->setVelocity(-Vec2(SPEED_GO, 0));
+			knight->getSprite()->setFlippedX(true);
+			((Knight*)(knight))->go();
 		}
 		if (degree > -135 && degree < -45)//Move Down
 		{
-			main->getSprite()->getPhysicsBody()->setVelocity(-Vec2(0, SPEED_GO));
-			((Knight*)(main))->go();
+			knight->getSprite()->getPhysicsBody()->setVelocity(-Vec2(0, SPEED_GO));
+			((Knight*)(knight))->go();
 		}
 		if (degree > -45 && degree < 45)//Move Right
 		{
-			main->getSprite()->getPhysicsBody()->setVelocity(Vec2(SPEED_GO, 0));
-			main->getSprite()->setFlippedX(false);
-			((Knight*)(main))->go();
+			knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(SPEED_GO, 0));
+			knight->getSprite()->setFlippedX(false);
+			((Knight*)(knight))->go();
 		}
 		if (degree > 45 && degree < 135)//Move Up
 		{
-			main->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, SPEED_GO));
-			((Knight*)(main))->go();
+			knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, SPEED_GO));
+			((Knight*)(knight))->go();
 		}
 	}
 	else
 	{
-		((Knight*)(main))->start();
-		main->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 0));
+		((Knight*)(knight))->start();
+		knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 0));
 	}
 }
 

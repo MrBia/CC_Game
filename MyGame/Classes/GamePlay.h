@@ -20,13 +20,14 @@ private:
 	CCTMXTiledMap* _tileMap;
 	CCTMXLayer* _background;
 	CCTMXLayer* _object;
+	CCTMXObjectGroup *_objectGroup;
 	Sprite* sprite;
 	SneakyJoystickSkinnedBase* joystickBase;
 	SneakyJoystick *leftJoystick;
 	float activeRunRange;
 
 	// object
-	Objject* main;
+	Objject* knight;
 	Objject* zombie;
 	Objject * dragon;
 
