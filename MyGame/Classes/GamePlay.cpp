@@ -48,7 +48,7 @@ void GamePlay::update(float deltaTime)
 void GamePlay::createMap()
 {
 	_tileMap = new CCTMXTiledMap();
-	_tileMap->initWithTMXFile("Map/map_1.tmx");
+	_tileMap->initWithTMXFile("Map/map_2.tmx");
 	
 	this->addChild(_tileMap);
 }
