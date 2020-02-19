@@ -57,6 +57,11 @@ void Knight::Init()
 	Vector<SpriteFrame*> animateWaits;
 	animateWaits.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("wait1.png"));
 	animateWaits.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("wait2.png"));
+
+	// skill
+	Vector<SpriteFrame*> animateSkills;
+	animateWaits.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("wait1.png"));
+	animateWaits.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("wait2.png"));
 	animateWaits.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("wait3.png"));
 
 	// animations
@@ -69,12 +74,33 @@ void Knight::Init()
 	animation = Animation::createWithSpriteFrames(animateWaits, 0.2f);
 	aniWait = Animate::create(animation);
 
+	// Fire
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Fire/Fire.plist", "Fire/Fire.png");
+	Vector<SpriteFrame*> animateFire;
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_1.png"));
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_2.png"));
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_3.png"));
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_4.png"));
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_5.png"));
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_6.png"));
+	animateFire.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("fire_7.png"));
+
+	// animation fire
+	animation = Animation::createWithSpriteFrames(animateFire, 0.2f);
+	aniFire = Animate::create(animation);
 
 	// retain
 	aniFight->retain();
 	aniGo->retain();
 	aniRun->retain();
 	aniWait->retain();
+	aniFire->retain();
+
+
+	// create fire
+	fire = Sprite::create("Fire/fire_alone.png");
+	this->layer->addChild(fire);
+	fire->setPosition(Vec2(-100, -100));
 }
 
 void Knight::Update(float deltaTime)
@@ -99,6 +125,13 @@ void Knight::fight()
 	}
 }
 
+void Knight::skill()
+{
+	if (currentState != state::GO && currentState != state::RUN && currentState != state::FIGHT) {
+		setState(state::K_SKILL);
+	}
+}
+
 void Knight::go()
 {
 	setState(state::GO);
@@ -114,13 +147,6 @@ void Knight::setState(int nextState)
 	switch (nextState)
 	{
 	case state::START: {
-		/*if (nextState != currentState) {
-			this->getSprite()->stopAllActions();
-			this->getSprite()->runAction(aniWait);
-		}
-		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
-			this->getSprite()->runAction(aniWait);
-		}*/
 
 		if (this->getSprite()->getNumberOfRunningActions() == 0) {
 			this->getSprite()->runAction(aniWait);
@@ -149,7 +175,7 @@ void Knight::setState(int nextState)
 		}
 		break;
 	}
-	case state::FIGHT: {
+	/*case state::FIGHT: {
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
 			this->getSprite()->runAction(aniFight);
@@ -158,6 +184,23 @@ void Knight::setState(int nextState)
 			this->getSprite()->runAction(aniFight);
 		}
 		
+		break;
+	}*/
+	case state::FIGHT: {
+		if (nextState != currentState) {
+			this->getSprite()->stopAllActions();
+			this->getSprite()->runAction(aniFight);
+
+
+			if (fire->getNumberOfRunningActions() == 0) {
+				fire->setPosition(this->getSprite()->getPosition());
+				auto moveBy = MoveBy::create(0.3, Vec2(250, 0));
+				auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
+				auto sequence = Sequence::create(moveBy, aniFire, moveTo, nullptr);
+				fire->runAction(sequence);
+			}
+		}
+
 		break;
 	}
 	default:

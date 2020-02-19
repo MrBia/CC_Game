@@ -21,6 +21,7 @@ private:
 	CCTMXLayer* _background;
 	CCTMXLayer* _object;
 	CCTMXObjectGroup *_objectGroup;
+	CCTMXLayer* _physics;
 	Sprite* sprite;
 	SneakyJoystickSkinnedBase* joystickBase;
 	SneakyJoystick *leftJoystick;
@@ -34,6 +35,7 @@ private:
 	// joystick
 	Layer* layerr;
 	ui::Button* btnFight;
+	ui::Button* btnFire;
 public:
 	static Scene* createGame();
 	virtual bool init();
@@ -45,9 +47,11 @@ public:
 	void OnKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	void addDispatCher();
 	void createEdge();
+	void createPhysic();
 	void Fight(Ref* sender, Widget::TouchEventType type);
 	void createJoystick(Layer* layer);
 	void UpdateJoystick(float dt);
+	void createButton(Layer* layer);
 	GamePlay();
 	~GamePlay();
 	CREATE_FUNC(GamePlay);

@@ -62,8 +62,6 @@ void Zombie::Init()
 	animationFight_1->retain();
 	animationFight_2->retain();
 	animationDie->retain();
-
-	this->getSprite()->runAction(RepeatForever::create(animationFight_2));
 }
 
 void Zombie::Update(float deltaTime)

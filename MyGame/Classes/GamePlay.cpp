@@ -23,6 +23,9 @@ bool GamePlay::init()
 	// create map
 	createMap();
 
+	// create physic map
+	//createPhysic();
+
 	// create object
 	createObject();
 
@@ -31,6 +34,9 @@ bool GamePlay::init()
 
 	// create joystick
 	createJoystick(this);
+
+	// create button
+	createButton(this);
 
 	// update 
 	scheduleUpdate();
@@ -41,8 +47,8 @@ void GamePlay::update(float deltaTime)
 {
 	setViewPointCenter(knight->getSprite()->getPosition());
 	UpdateJoystick(deltaTime);
-	((Zombie*)(zombie))->normalFight();
-	((Dragon*)(dragon))->die();
+	//((Zombie*)(zombie))->normalFight();
+	//((Dragon*)(dragon))->die();
 }
 
 void GamePlay::createMap()
@@ -50,17 +56,16 @@ void GamePlay::createMap()
 	_tileMap = new CCTMXTiledMap();
 	_tileMap->initWithTMXFile("Map/map_2.tmx");
 	_objectGroup = _tileMap->getObjectGroup("Object");
+	_physics = _tileMap->getLayer("Physic");
 	this->addChild(_tileMap);
+	_physics->setVisible(false);
 }
 
 void GamePlay::createObject()
 {
-	/*knight = new Knight(this);
-	zombie = new Zombie(this);
-	dragon = new Dragon(this);
-	((Zombie*)(zombie))->normalFight();
-	((Knight*)(main))->start();*/
-
+	auto sprite = Sprite::create("stand_1.png");
+	sprite->setPosition(Vec2(300, 300));
+	this->addChild(sprite);
 	auto objects = _objectGroup->getObjects();
 	for (int i = 0; i < objects.size(); i++) {
 		auto object = objects.at(i);
@@ -72,6 +77,7 @@ void GamePlay::createObject()
 		if (type == 1) {
 			knight = new Knight(this); 
 			knight->getSprite()->setPosition(Vec2(posX, posY));
+			knight->getSprite()->setScale(0.7);
 		}
 		else if (type == 2) {
 			dragon = new Dragon(this);
@@ -149,6 +155,23 @@ void GamePlay::createEdge()
 	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	edgeNode->setPhysicsBody(edgeBody);
 	this->addChild(edgeNode);
+}
+
+void GamePlay::createPhysic()
+{
+	Size layerSize = _physics->getLayerSize();
+	for (int i = 0; i < layerSize.width; i++) {
+		for (int j = 0; j < layerSize.height; j++) {
+			auto tileSet = _physics->getTileAt(Vec2(i, j));
+			if (tileSet != NULL) {
+				auto physic = PhysicsBody::createBox(tileSet->getContentSize());
+				physic->setCollisionBitmask(1);
+				physic->setContactTestBitmask(true);
+				physic->setDynamic(false);
+				tileSet->setPhysicsBody(physic);
+			}
+		}
+	}
 }
 
 void GamePlay::Fight(Ref* sender, Widget::TouchEventType type) // co tham so ham CALLBACK ko loi
@@ -231,6 +254,10 @@ void GamePlay::UpdateJoystick(float dt)
 		((Knight*)(knight))->start();
 		knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 0));
 	}
+}
+
+void GamePlay::createButton(Layer* layer)
+{
 }
 
 GamePlay::GamePlay()

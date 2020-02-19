@@ -5,7 +5,8 @@ enum state {
 	START,
 	GO,
 	RUN,
-	FIGHT
+	FIGHT,
+	K_SKILL
 };
 
 class Knight :
@@ -17,13 +18,16 @@ private:
 	Animate* aniGo;
 	Animate* aniRun;
 	Animate* aniWait;
+	Animate* aniFire;
 	int currentState;
+	Sprite* fire;
 public:
 	void Init();
 	void Update(float deltaTime);
 	Knight(Layer* layer);
 	void start();
 	void fight();
+	void skill();
 	void go();
 	void run();
 	void setState(int nextState);
