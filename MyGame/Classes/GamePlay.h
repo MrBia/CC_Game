@@ -49,9 +49,9 @@ public:
 	void createEdge();
 	void createPhysic();
 	void Fight(Ref* sender, Widget::TouchEventType type);
+	void Fire(Ref* sender, Widget::TouchEventType type);
 	void createJoystick(Layer* layer);
 	void UpdateJoystick(float dt);
-	void createButton(Layer* layer);
 	GamePlay();
 	~GamePlay();
 	CREATE_FUNC(GamePlay);

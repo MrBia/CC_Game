@@ -35,9 +35,6 @@ bool GamePlay::init()
 	// create joystick
 	createJoystick(this);
 
-	// create button
-	createButton(this);
-
 	// update 
 	scheduleUpdate();
 	return true;
@@ -63,9 +60,6 @@ void GamePlay::createMap()
 
 void GamePlay::createObject()
 {
-	auto sprite = Sprite::create("stand_1.png");
-	sprite->setPosition(Vec2(300, 300));
-	this->addChild(sprite);
 	auto objects = _objectGroup->getObjects();
 	for (int i = 0; i < objects.size(); i++) {
 		auto object = objects.at(i);
@@ -179,6 +173,11 @@ void GamePlay::Fight(Ref* sender, Widget::TouchEventType type) // co tham so ham
 	((Knight*)(knight))->fight();
 }
 
+void GamePlay::Fire(Ref * sender, Widget::TouchEventType type)
+{
+	((Knight*)(knight))->skill();
+}
+
 void GamePlay::createJoystick(Layer* layer)
 {
 	auto thumb = Sprite::create("Joystick/thumb.png");
@@ -212,9 +211,14 @@ void GamePlay::createJoystick(Layer* layer)
 	// btn fight
 	btnFight = ui::Button::create("Joystick/hammer_normal.png", "Joystick/hammer_pressed.png");
 	btnFight->setPosition(Vec2(800, 100));
-
 	btnFight->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fight, this));
 	layerr->addChild(btnFight);
+
+	// btn Fire
+	btnFire = ui::Button::create("Joystick/fire_normal.png", "Joystick/fire_press.png");
+	btnFire->setPosition(Vec2(900, 100));
+	btnFire->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fire, this));
+	layerr->addChild(btnFire);
 
 	layer->addChild(layerr);
 }
@@ -256,9 +260,6 @@ void GamePlay::UpdateJoystick(float dt)
 	}
 }
 
-void GamePlay::createButton(Layer* layer)
-{
-}
 
 GamePlay::GamePlay()
 {

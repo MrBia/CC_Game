@@ -175,7 +175,7 @@ void Knight::setState(int nextState)
 		}
 		break;
 	}
-	/*case state::FIGHT: {
+	case state::FIGHT: {
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
 			this->getSprite()->runAction(aniFight);
@@ -185,8 +185,8 @@ void Knight::setState(int nextState)
 		}
 		
 		break;
-	}*/
-	case state::FIGHT: {
+	}
+	case state::K_SKILL: {
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
 			this->getSprite()->runAction(aniFight);
