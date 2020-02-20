@@ -36,8 +36,12 @@
     <ClCompile Include="..\Classes\Objject.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Zombie.cpp" />
-    <ClCompile Include="..\Classes\Dragon.cpp" />
+    <ClCompile Include="..\Classes\Dragon.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Zombie.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -67,8 +71,12 @@
     <ClInclude Include="..\Classes\Objject.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Zombie.h" />
-    <ClInclude Include="..\Classes\Dragon.h" />
+    <ClInclude Include="..\Classes\Dragon.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Zombie.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

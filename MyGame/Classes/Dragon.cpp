@@ -17,11 +17,12 @@ void Dragon::Init()
 	this->getSprite()->setPosition(Vec2(400, 100));
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
-	physic->setDynamic(true);
+	physic->setDynamic(false);
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
+	this->getSprite()->setTag(DRAGON_TAG);
 
 	// state
 	currentState = stateDragon::D_START;

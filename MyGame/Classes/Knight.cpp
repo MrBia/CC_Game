@@ -10,11 +10,12 @@ void Knight::Init()
 	this->getSprite()->setPosition(100, 100);
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
-	physic->setDynamic(true);
+	physic->setDynamic(false);
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
+	this->getSprite()->setTag(KNIGHT_TAG);
 
 	// state
 	currentState = state::START;
@@ -101,6 +102,13 @@ void Knight::Init()
 	fire = Sprite::create("Fire/fire_alone.png");
 	this->layer->addChild(fire);
 	fire->setPosition(Vec2(-100, -100));
+
+	auto physics = PhysicsBody::createBox(fire->getContentSize());
+	physics->setDynamic(true);
+	physics->setRotationEnable(false);
+	physics->setGravityEnable(false);
+	fire->setPhysicsBody(physics);
+	fire->setTag(FIRE_TAG);
 }
 
 void Knight::Update(float deltaTime)

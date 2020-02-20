@@ -10,11 +10,12 @@ void Zombie::Init()
 	this->getSprite()->setPosition(Vec2(200, 100));
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
-	physic->setDynamic(true);
+	physic->setDynamic(false);
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
+	this->getSprite()->setTag(ZOMBIE_TAG);
 
 	// state
 	currentState = stateZombie::Z_START;
