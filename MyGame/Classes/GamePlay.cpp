@@ -44,8 +44,19 @@ void GamePlay::update(float deltaTime)
 {
 	setViewPointCenter(knight->getSprite()->getPosition());
 	UpdateJoystick(deltaTime);
-	//((Zombie*)(zombie))->normalFight();
-	//((Dragon*)(dragon))->die();
+	
+	// update knight
+	knight->Update(deltaTime);
+
+	// update zombie
+	for (int i = 0; i < zombies.size(); i++) {
+		(zombies.at(i))->Update(deltaTime);
+	}
+
+	// update dragon
+	for (int i = 0; i < dragons.size(); i++) {
+		(dragons.at(i))->Update(deltaTime);
+	}
 }
 
 void GamePlay::createMap()
@@ -60,6 +71,8 @@ void GamePlay::createMap()
 
 void GamePlay::createObject()
 {
+	int numDragon = 0;
+	int numZombie = 0;
 	auto objects = _objectGroup->getObjects();
 	for (int i = 0; i < objects.size(); i++) {
 		auto object = objects.at(i);
@@ -69,17 +82,21 @@ void GamePlay::createObject()
 		int type = object.asValueMap().at("type").asInt();
 
 		if (type == 1) {
-			knight = new Knight(this); 
+			knight = new Knight(this);
 			knight->getSprite()->setPosition(Vec2(posX, posY));
 			knight->getSprite()->setScale(0.7);
 		}
 		else if (type == 2) {
-			dragon = new Dragon(this);
+			Objject* dragon = new Dragon(this, numDragon);
 			dragon->getSprite()->setPosition(Vec2(posX, posY));
+			dragons.push_back(dragon);
+			numDragon++;
 		}
 		else if (type == 3) {
-			zombie = new Zombie(this);
+			Objject* zombie = new Zombie(this, numZombie);
 			zombie->getSprite()->setPosition(Vec2(posX, posY));
+			zombies.push_back(zombie);
+			numZombie++;
 		}
 	}
 }
@@ -139,6 +156,11 @@ void GamePlay::addDispatCher()
 	keyListener->onKeyPressed = CC_CALLBACK_2(GamePlay::OnKeyPressed, this);
 	keyListener->onKeyReleased = CC_CALLBACK_2(GamePlay::OnKeyReleased, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
+
+	// contact
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(GamePlay::onContactBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
 void GamePlay::createEdge()
@@ -176,6 +198,35 @@ void GamePlay::Fight(Ref* sender, Widget::TouchEventType type) // co tham so ham
 void GamePlay::Fire(Ref * sender, Widget::TouchEventType type)
 {
 	((Knight*)(knight))->skill();
+}
+
+bool GamePlay::onContactBegin(PhysicsContact & contact)
+{
+	auto nodeA = contact.getShapeA()->getBody();
+	auto nodeB = contact.getShapeB()->getBody();
+
+	// fire vs dragon
+	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == DRAGON_TAG) || (nodeA->getCollisionBitmask() == DRAGON_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
+		if (nodeA->getCollisionBitmask() == DRAGON_TAG) {
+			dragons.at(nodeA->getGroup())->setBlood(dragons.at(nodeA->getGroup())->getBlood() - 10);
+		}
+		else if (nodeB->getCollisionBitmask() == DRAGON_TAG) {
+			dragons.at(nodeB->getGroup())->setBlood(dragons.at(nodeB->getGroup())->getBlood() - 10);
+		}
+	}
+
+	// fire vs zombie
+	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == ZOMBIE_TAG) || (nodeA->getCollisionBitmask() == ZOMBIE_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
+		if (nodeA->getCollisionBitmask() == ZOMBIE_TAG) {
+			zombies.at(nodeA->getGroup())->setBlood(zombies.at(nodeA->getGroup())->getBlood() - 10);
+		}
+		else if (nodeB->getCollisionBitmask() == ZOMBIE_TAG) {
+			zombies.at(nodeB->getGroup())->setBlood(zombies.at(nodeB->getGroup())->getBlood() - 10);
+		}
+	}
+
+
+	return false;
 }
 
 void GamePlay::createJoystick(Layer* layer)

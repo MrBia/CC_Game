@@ -2,9 +2,10 @@
 
 
 
-Dragon::Dragon(Layer* layer)
+Dragon::Dragon(Layer* layer, int index)
 {
 	this->layer = layer;
+	this->index = index;
 	Init();
 }
 
@@ -12,14 +13,16 @@ Dragon::Dragon(Layer* layer)
 void Dragon::Init()
 {
 	this->setSprite(Sprite::create("Dragon/fireUp_1.png"));
+	this->setBlood(BLOOD);
 	layer->addChild(this->getSprite());
-	//this->getSprite()->setAnchorPoint(Vec2(0.5, 0));
-	this->getSprite()->setPosition(Vec2(400, 100));
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
 	physic->setDynamic(false);
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
+	physic->setContactTestBitmask(1);
+	physic->setCollisionBitmask(DRAGON_TAG);
+	physic->setGroup(index);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
 	this->getSprite()->setTag(DRAGON_TAG);
@@ -122,10 +125,16 @@ void Dragon::Init()
 	animateFly->retain();
 	animateStop->retain();
 	animateDie->retain();
+
+	// create blood bar
+	createBloodBar();
 }
 
 void Dragon::Update(float deltaTime)
 {
+	bloodbg->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().height));
+	blood->setPosition(bloodbg->getPosition());
+	blood->setPercent(this->getBlood());
 }
 
 void Dragon::setState(int nextState)
@@ -240,6 +249,21 @@ void Dragon::stop()
 void Dragon::die()
 {
 	setState(stateDragon::D_DIE);
+}
+
+void Dragon::createBloodBar()
+{
+	bloodbg = ui::LoadingBar::create("Bar/hud_bg.png");
+	this->layer->addChild(bloodbg, 100);
+
+	this->blood = ui::LoadingBar::create("Bar/hud_blood.png");
+	blood->setPercent(this->getBlood());
+	blood->setDirection(ui::LoadingBar::Direction::LEFT);
+	this->layer->addChild(blood, 200);
+
+	// set scale
+	bloodbg->setScale(SCALE_BLOOD_BAR);
+	blood->setScale(SCALE_BLOOD_BAR);
 }
 
 Dragon::~Dragon()

@@ -21,6 +21,8 @@ private:
 	Animate* aniFire;
 	int currentState;
 	Sprite* fire;
+	cocos2d::ui::LoadingBar* bloodbg;
+	cocos2d::ui::LoadingBar* blood;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -31,6 +33,7 @@ public:
 	void go();
 	void run();
 	void setState(int nextState);
+	void createBloodBar();
 
 	~Knight();
 };

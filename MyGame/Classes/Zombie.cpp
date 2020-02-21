@@ -7,12 +7,16 @@ void Zombie::Init()
 	this->setSprite(Sprite::create("Zombie/zombie_1_1.png"));
 	layer->addChild(this->getSprite());
 	this->getSprite()->setAnchorPoint(Vec2(0.5, 0));
-	this->getSprite()->setPosition(Vec2(200, 100));
+	this->setBlood(BLOOD);
+
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
 	physic->setDynamic(false);
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
+	physic->setGroup(this->index);
+	physic->setContactTestBitmask(1);
+	physic->setCollisionBitmask(ZOMBIE_TAG);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
 	this->getSprite()->setTag(ZOMBIE_TAG);
@@ -63,10 +67,17 @@ void Zombie::Init()
 	animationFight_1->retain();
 	animationFight_2->retain();
 	animationDie->retain();
+
+
+	// create blood bar
+	createBloodBar();
 }
 
 void Zombie::Update(float deltaTime)
 {
+	bloodbg->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().height));
+	blood->setPosition(bloodbg->getPosition());
+	blood->setPercent(this->getBlood());
 }
 
 void Zombie::start()
@@ -137,12 +148,27 @@ void Zombie::setState(int nextState)
 	currentState = nextState;
 }
 
-Zombie::Zombie(Layer* layer)
+void Zombie::createBloodBar()
 {
-	this->layer = layer;
-	Init();
+	bloodbg = ui::LoadingBar::create("Bar/hud_bg.png");
+	this->layer->addChild(bloodbg, 100);
+
+	this->blood = ui::LoadingBar::create("Bar/hud_blood.png");
+	blood->setPercent(this->getBlood());
+	blood->setDirection(ui::LoadingBar::Direction::LEFT);
+	this->layer->addChild(blood, 200);
+
+	// set scale
+	bloodbg->setScale(SCALE_BLOOD_BAR);
+	blood->setScale(SCALE_BLOOD_BAR);
 }
 
+Zombie::Zombie(Layer* layer, int index)
+{
+	this->layer = layer;
+	this->index = index;
+	Init();
+}
 
 Zombie::~Zombie()
 {

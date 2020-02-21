@@ -30,7 +30,9 @@ private:
 	// object
 	Objject* knight;
 	Objject* zombie;
+	std::vector<Objject*> zombies;
 	Objject * dragon;
+	std::vector<Objject*> dragons;
 
 	// joystick
 	Layer* layerr;
@@ -50,6 +52,7 @@ public:
 	void createPhysic();
 	void Fight(Ref* sender, Widget::TouchEventType type);
 	void Fire(Ref* sender, Widget::TouchEventType type);
+	bool onContactBegin(PhysicsContact& contact);
 	void createJoystick(Layer* layer);
 	void UpdateJoystick(float dt);
 	GamePlay();

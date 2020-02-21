@@ -25,6 +25,9 @@ private:
 	Animate* animateStop;
 	Animate* animateDie;
 	int  currentState;
+	int index;
+	cocos2d::ui::LoadingBar* bloodbg;
+	cocos2d::ui::LoadingBar* blood;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -36,7 +39,8 @@ public:
 	void fly();
 	void stop();
 	void die();
-	Dragon(Layer* layer);
+	void createBloodBar();
+	Dragon(Layer* layer, int index);
 	~Dragon();
 };
 

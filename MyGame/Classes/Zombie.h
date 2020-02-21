@@ -16,6 +16,9 @@ private:
 	Animate* animationFight_2;
 	Animate* animationDie;
 	int currentState;
+	int index;
+	cocos2d::ui::LoadingBar* bloodbg;
+	cocos2d::ui::LoadingBar* blood;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -24,7 +27,8 @@ public:
 	void skillFight();
 	void die();
 	void setState(int nextState);
-	Zombie(Layer* layer);
+	void createBloodBar();
+	Zombie(Layer* layer, int index);
 	~Zombie();
 };
 

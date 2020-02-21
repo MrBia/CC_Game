@@ -8,11 +8,13 @@ void Knight::Init()
 	layer->addChild(this->getSprite());
 	this->getSprite()->setAnchorPoint(Vec2(0.5, 0));
 	this->getSprite()->setPosition(100, 100);
+	this->setBlood(BLOOD);
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
 	physic->setDynamic(false);
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
+	physic->setContactTestBitmask(1);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
 	this->getSprite()->setTag(KNIGHT_TAG);
@@ -107,12 +109,20 @@ void Knight::Init()
 	physics->setDynamic(true);
 	physics->setRotationEnable(false);
 	physics->setGravityEnable(false);
+	physics->setContactTestBitmask(1);
+	physics->setCollisionBitmask(FIRE_TAG);
 	fire->setPhysicsBody(physics);
 	fire->setTag(FIRE_TAG);
+
+	// create blood bar
+	createBloodBar();
 }
 
 void Knight::Update(float deltaTime)
 {
+	bloodbg->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().height));
+	blood->setPosition(bloodbg->getPosition());
+	blood->setPercent(this->getBlood());
 }
 
 Knight::Knight(Layer* layer)
@@ -218,6 +228,20 @@ void Knight::setState(int nextState)
 	currentState = nextState;
 }
 
+void Knight::createBloodBar()
+{
+	bloodbg = ui::LoadingBar::create("Bar/hud_bg.png");
+	this->layer->addChild(bloodbg, 100);
+
+	this->blood = ui::LoadingBar::create("Bar/hud_blood.png");
+	blood->setPercent(this->getBlood());
+	blood->setDirection(ui::LoadingBar::Direction::LEFT);
+	this->layer->addChild(blood, 200);
+
+	// set scale
+	bloodbg->setScale(SCALE_BLOOD_BAR);
+	blood->setScale(SCALE_BLOOD_BAR);
+}
 
 Knight::~Knight()
 {
