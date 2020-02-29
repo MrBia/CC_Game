@@ -80,7 +80,7 @@ void Zombie::Update(float deltaTime)
 	blood->setPercent(this->getBlood());
 }
 
-void Zombie::start()
+void Zombie::startAI(Objject* knight)
 {
 	setState(stateZombie::Z_START);
 }

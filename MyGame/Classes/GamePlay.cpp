@@ -37,6 +37,8 @@ bool GamePlay::init()
 
 	// update 
 	scheduleUpdate();
+
+
 	return true;
 }
 
@@ -56,6 +58,7 @@ void GamePlay::update(float deltaTime)
 	// update dragon
 	for (int i = 0; i < dragons.size(); i++) {
 		(dragons.at(i))->Update(deltaTime);
+		(dragons.at(i))->startAI(knight);
 	}
 }
 
@@ -209,9 +212,21 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == DRAGON_TAG) || (nodeA->getCollisionBitmask() == DRAGON_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
 		if (nodeA->getCollisionBitmask() == DRAGON_TAG) {
 			dragons.at(nodeA->getGroup())->setBlood(dragons.at(nodeA->getGroup())->getBlood() - 10);
+			if (dragons.at(nodeA->getGroup())->getBlood() <= 90) {
+				/*auto soul = new Soul(this);
+				auto moveTo = MoveTo::create(2, knight->getSprite()->getPosition());
+				soul->getSprite()->setPosition(dragons.at(nodeA->getGroup())->getSprite()->getPosition());
+				soul->getSprite()->runAction(moveTo);*/
+			}
 		}
 		else if (nodeB->getCollisionBitmask() == DRAGON_TAG) {
 			dragons.at(nodeB->getGroup())->setBlood(dragons.at(nodeB->getGroup())->getBlood() - 10);
+			if (dragons.at(nodeB->getGroup())->getBlood() <= 90) {
+				/*auto soul = new Soul(this);
+				auto moveTo = MoveTo::create(2, knight->getSprite()->getPosition());
+				soul->getSprite()->setPosition(dragons.at(nodeB->getGroup())->getSprite()->getPosition());
+				soul->getSprite()->runAction(moveTo);*/
+			}
 		}
 	}
 
@@ -306,11 +321,10 @@ void GamePlay::UpdateJoystick(float dt)
 	}
 	else
 	{
-		((Knight*)(knight))->start();
+		((Knight*)(knight))->startAI(knight);
 		knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(0, 0));
 	}
 }
-
 
 GamePlay::GamePlay()
 {

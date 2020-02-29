@@ -14,6 +14,7 @@ public:
 	int getBlood();
 	void setSprite(Sprite* sprite);
 	Sprite* getSprite();
+	virtual void startAI(Objject* knight) = 0;
 	virtual void Init() = 0;
 	virtual void Update(float deltaTime) = 0;
 	Objject();

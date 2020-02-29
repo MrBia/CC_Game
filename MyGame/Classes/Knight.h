@@ -27,7 +27,7 @@ public:
 	void Init();
 	void Update(float deltaTime);
 	Knight(Layer* layer);
-	void start();
+	void startAI(Objject* knight);
 	void fight();
 	void skill();
 	void go();

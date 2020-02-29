@@ -131,7 +131,7 @@ Knight::Knight(Layer* layer)
 	Init();
 }
 
-void Knight::start()
+void Knight::startAI(Objject* knight)
 {
 	setState(state::START);
 }

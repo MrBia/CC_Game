@@ -8,6 +8,7 @@
 #include "Zombie.h"
 #include "Dragon.h"
 #include "ui\UIButton.h"
+#include "Soul.h"
 
 #define MARGIN_JOYSTICK 50
 

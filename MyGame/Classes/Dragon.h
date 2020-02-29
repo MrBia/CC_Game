@@ -28,11 +28,12 @@ private:
 	int index;
 	cocos2d::ui::LoadingBar* bloodbg;
 	cocos2d::ui::LoadingBar* blood;
+	bool b = true;
 public:
 	void Init();
 	void Update(float deltaTime);
 	void setState(int nextState);
-	void start();
+	void startAI(Objject* knight);
 	void fireUp();
 	void fireDownNormal();
 	void fireDownSkill();
@@ -40,6 +41,7 @@ public:
 	void stop();
 	void die();
 	void createBloodBar();
+	float distance(Objject* dragon, Objject* knight);
 	Dragon(Layer* layer, int index);
 	~Dragon();
 };

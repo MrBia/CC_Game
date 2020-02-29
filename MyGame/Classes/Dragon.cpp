@@ -9,7 +9,6 @@ Dragon::Dragon(Layer* layer, int index)
 	Init();
 }
 
-
 void Dragon::Init()
 {
 	this->setSprite(Sprite::create("Dragon/fireUp_1.png"));
@@ -132,6 +131,7 @@ void Dragon::Init()
 
 void Dragon::Update(float deltaTime)
 {
+	// update blood
 	bloodbg->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().height));
 	blood->setPosition(bloodbg->getPosition());
 	blood->setPercent(this->getBlood());
@@ -184,10 +184,9 @@ void Dragon::setState(int nextState)
 	case stateDragon::FLY: {
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
-			auto sequence = Sequence::create(animateJump, animateFly, nullptr);
-			this->getSprite()->runAction(sequence);
+			this->getSprite()->runAction(animateFly);
 		}
-		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
+		else if (animateFly->isDone()) {           // getactionbytag() == nullptr
 			this->getSprite()->runAction(animateFly);
 		}
 		break;
@@ -205,7 +204,8 @@ void Dragon::setState(int nextState)
 			this->getSprite()->runAction(animateDie);
 		}
 		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
-			this->getSprite()->runAction(animateDie);
+			this->getSprite()->setVisible(false);
+			this->getSprite()->getPhysicsBody()->setEnabled(false);
 		}
 		break;
 	}
@@ -216,9 +216,30 @@ void Dragon::setState(int nextState)
 	currentState = nextState;
 }
 
-void Dragon::start()
+void Dragon::startAI(Objject* knight)
 {
-	setState(stateDragon::D_START);
+	setState(currentState);
+	
+	float dis = distance(this, knight);
+	if (dis <= DISTANCE_FIGHT_D) {
+		if (this->getBlood() >= 90) {
+			this->fireUp();
+		}
+		else if (this->getBlood() < 90 && this->getBlood() > 0) {
+			setState(stateDragon::FLY);
+			
+			auto moveTo = MoveTo::create(5, Vec2(500, 500));
+
+			if (b) {
+				this->getSprite()->runAction(moveTo);
+				b = false;
+			}
+		}
+		else if (this->getBlood() <= 0) {
+			this->die();
+		}
+
+	}
 }
 
 void Dragon::fireUp()
@@ -264,6 +285,16 @@ void Dragon::createBloodBar()
 	// set scale
 	bloodbg->setScale(SCALE_BLOOD_BAR);
 	blood->setScale(SCALE_BLOOD_BAR);
+}
+
+float Dragon::distance(Objject * dragon, Objject * knight)
+{
+	Vec2 posDR = dragon->getSprite()->getPosition();
+	Vec2 posKN = knight->getSprite()->getPosition();
+
+	float dis = sqrt((posDR.x - posKN.x)*(posDR.x - posKN.x) + (posDR.y - posKN.y)*(posDR.y - posKN.y));
+
+	return dis;
 }
 
 Dragon::~Dragon()

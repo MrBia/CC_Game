@@ -22,7 +22,7 @@ private:
 public:
 	void Init();
 	void Update(float deltaTime);
-	void start();
+	void startAI(Objject* knight);
 	void normalFight();
 	void skillFight();
 	void die();
