@@ -127,6 +127,9 @@ void Dragon::Init()
 
 	// create blood bar
 	createBloodBar();
+
+	moveTo = MoveTo::create(5, Vec2(500, 500));
+	moveTo->retain();
 }
 
 void Dragon::Update(float deltaTime)
@@ -221,15 +224,57 @@ void Dragon::startAI(Objject* knight)
 	setState(currentState);
 	
 	float dis = distance(this, knight);
-	if (dis <= DISTANCE_FIGHT_D) {
+
+	if (this->getBlood() > 0) {
+		life = true;
+	}
+	else {
+		life = false;
+	}
+
+	if (life) {
+		if (dis <= DISTANCE_FIGHT_D) {
+			log("aaaaaaaa");
+			if (knight->getSprite()->getPosition().x < this->getSprite()->getPosition().x) {
+				this->getSprite()->setFlippedX(true);
+			}
+			else {
+				this->getSprite()->setFlippedX(false);
+			}
+			if (this->getBlood() >= 90) {
+				this->fireUp();
+			}
+		}
+
+		if (this->getBlood() < 90) {
+			log("cccccccc");
+			if (b1) setState(stateDragon::FLY);
+			if (b) {
+				this->getSprite()->runAction(moveTo);
+				b = false;
+			}
+			if (b1 && moveTo->isDone()) {
+				setState(stateDragon::STOP);
+				b1 = false;
+			}
+		}
+
+		if (dis > DISTANCE_FIGHT_D && moveTo->isDone() && animateStop->isDone()) {
+			setState(stateDragon::D_START);
+		}
+	}
+
+
+	/*if (dis <= DISTANCE_FIGHT_D) {
 		if (this->getBlood() >= 90) {
 			this->fireUp();
 		}
 		else if (this->getBlood() < 90 && this->getBlood() > 0) {
-			setState(stateDragon::FLY);
 			
-			auto moveTo = MoveTo::create(5, Vec2(500, 500));
-
+			if(b1) setState(stateDragon::FLY);
+			
+			
+			
 			if (b) {
 				this->getSprite()->runAction(moveTo);
 				b = false;
@@ -238,8 +283,15 @@ void Dragon::startAI(Objject* knight)
 		else if (this->getBlood() <= 0) {
 			this->die();
 		}
-
 	}
+
+	if (b1 && moveTo->isDone()) {
+		b1 = false;
+		setState(stateDragon::STOP);
+	}
+	else if (!b1 && this->getBlood() > 0) {
+		setState(stateDragon::D_START);
+	}*/
 }
 
 void Dragon::fireUp()

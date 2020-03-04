@@ -29,6 +29,9 @@ private:
 	cocos2d::ui::LoadingBar* bloodbg;
 	cocos2d::ui::LoadingBar* blood;
 	bool b = true;
+	bool b1 = true;
+	MoveTo* moveTo;
+	bool life = true;
 public:
 	void Init();
 	void Update(float deltaTime);

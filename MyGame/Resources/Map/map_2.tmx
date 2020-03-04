@@ -118,7 +118,6 @@
   <object id="9" name="Zombie" type="3" x="1399" y="617"/>
   <object id="10" name="Zombie" type="3" x="1396" y="517"/>
   <object id="11" name="Dragon" type="2" x="957.576" y="609.091"/>
-  <object id="12" name="Dragon" type="2" x="848.485" y="1493.94"/>
  </objectgroup>
  <layer id="7" name="River" width="100" height="100">
   <data encoding="csv">
