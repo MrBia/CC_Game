@@ -300,6 +300,7 @@ void GamePlay::UpdateJoystick(float dt)
 		{
 			knight->getSprite()->getPhysicsBody()->setVelocity(-Vec2(SPEED_GO, 0));
 			knight->getSprite()->setFlippedX(true);
+			((Knight*)(knight))->IsLeft(true);
 			((Knight*)(knight))->go();
 		}
 		if (degree > -135 && degree < -45)//Move Down
@@ -311,6 +312,7 @@ void GamePlay::UpdateJoystick(float dt)
 		{
 			knight->getSprite()->getPhysicsBody()->setVelocity(Vec2(SPEED_GO, 0));
 			knight->getSprite()->setFlippedX(false);
+			((Knight*)(knight))->IsLeft(false);
 			((Knight*)(knight))->go();
 		}
 		if (degree > 45 && degree < 135)//Move Up

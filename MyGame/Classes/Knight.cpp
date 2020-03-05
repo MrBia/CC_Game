@@ -212,10 +212,12 @@ void Knight::setState(int nextState)
 
 			if (fire->getNumberOfRunningActions() == 0) {
 				fire->setPosition(this->getSprite()->getPosition());
-				auto moveBy = MoveBy::create(0.3, Vec2(250, 0));
+				if(!isLeft) moveBy = MoveBy::create(0.3, Vec2(250, 0));
+				else moveBy = MoveBy::create(0.3, Vec2(-250, 0));
 				auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
 				auto sequence = Sequence::create(moveBy, aniFire, moveTo, nullptr);
 				fire->runAction(sequence);
+			
 			}
 		}
 
@@ -241,6 +243,11 @@ void Knight::createBloodBar()
 	// set scale
 	bloodbg->setScale(SCALE_BLOOD_BAR);
 	blood->setScale(SCALE_BLOOD_BAR);
+}
+
+void Knight::IsLeft(bool isLeft)
+{
+	this->isLeft = isLeft;
 }
 
 Knight::~Knight()

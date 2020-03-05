@@ -23,6 +23,8 @@ private:
 	Sprite* fire;
 	cocos2d::ui::LoadingBar* bloodbg;
 	cocos2d::ui::LoadingBar* blood;
+	bool isLeft = false;
+	MoveBy* moveBy;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -34,6 +36,7 @@ public:
 	void run();
 	void setState(int nextState);
 	void createBloodBar();
+	void IsLeft(bool isLeft);
 
 	~Knight();
 };
