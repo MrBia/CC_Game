@@ -32,6 +32,9 @@ private:
 	bool b1 = true;
 	MoveTo* moveTo;
 	bool life = true;
+	Sprite* fire;
+	bool isLeft = false;
+	MoveBy* moveBy;
 public:
 	void Init();
 	void Update(float deltaTime);

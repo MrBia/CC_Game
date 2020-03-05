@@ -208,7 +208,7 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 	auto nodeA = contact.getShapeA()->getBody();
 	auto nodeB = contact.getShapeB()->getBody();
 
-	// fire vs dragon
+	// fire of knight vs dragon
 	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == DRAGON_TAG) || (nodeA->getCollisionBitmask() == DRAGON_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
 		if (nodeA->getCollisionBitmask() == DRAGON_TAG) {
 			dragons.at(nodeA->getGroup())->setBlood(dragons.at(nodeA->getGroup())->getBlood() - 10);
@@ -230,7 +230,7 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 		}
 	}
 
-	// fire vs zombie
+	// fire of knight vs zombie
 	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == ZOMBIE_TAG) || (nodeA->getCollisionBitmask() == ZOMBIE_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
 		if (nodeA->getCollisionBitmask() == ZOMBIE_TAG) {
 			zombies.at(nodeA->getGroup())->setBlood(zombies.at(nodeA->getGroup())->getBlood() - 10);
@@ -240,6 +240,15 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 		}
 	}
 
+	// fire of dragon vs knight
+	if ((nodeA->getCollisionBitmask() == FIRE_TAG_D && nodeB->getCollisionBitmask() == KNIGHT_TAG) || (nodeA->getCollisionBitmask() == KNIGHT_TAG && nodeB->getCollisionBitmask() == FIRE_TAG_D)) {
+		if (nodeA->getCollisionBitmask() == KNIGHT_TAG) {
+			knight->setBlood(knight->getBlood() - 10);
+		}
+		else if (nodeB->getCollisionBitmask() == KNIGHT_TAG) {
+			knight->setBlood(knight->getBlood() - 10);
+		}
+	}
 
 	return false;
 }

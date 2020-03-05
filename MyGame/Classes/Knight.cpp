@@ -15,9 +15,11 @@ void Knight::Init()
 	physic->setRotationEnable(false);
 	physic->setGravityEnable(false);
 	physic->setContactTestBitmask(1);
+	physic->setCollisionBitmask(KNIGHT_TAG);
 	this->getSprite()->setPhysicsBody(physic);
 	this->getSprite()->retain();
 	this->getSprite()->setTag(KNIGHT_TAG);
+	
 
 	// state
 	currentState = state::START;

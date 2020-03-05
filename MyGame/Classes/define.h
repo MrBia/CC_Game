@@ -9,6 +9,7 @@
 
 // define Dragon
 #define DISTANCE_FIGHT_D 300 
+#define FIRE_TAG_D 50
 
 // define tag
 #define FIRE_TAG 10
