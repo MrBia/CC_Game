@@ -213,7 +213,7 @@ void Knight::setState(int nextState)
 
 
 			if (fire->getNumberOfRunningActions() == 0) {
-				fire->setPosition(this->getSprite()->getPosition());
+				fire->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().width / 2));
 				if(!isLeft) moveBy = MoveBy::create(0.3, Vec2(250, 0));
 				else moveBy = MoveBy::create(0.3, Vec2(-250, 0));
 				auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));

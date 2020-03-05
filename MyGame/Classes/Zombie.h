@@ -15,10 +15,12 @@ private:
 	Animate* animationFight_1;
 	Animate* animationFight_2;
 	Animate* animationDie;
+	Animate* animationStart;
 	int currentState;
 	int index;
 	cocos2d::ui::LoadingBar* bloodbg;
 	cocos2d::ui::LoadingBar* blood;
+	bool life = true;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -28,6 +30,8 @@ public:
 	void die();
 	void setState(int nextState);
 	void createBloodBar();
+	float distance(Objject* zombie, Objject* knight);
+
 	Zombie(Layer* layer, int index);
 	~Zombie();
 };

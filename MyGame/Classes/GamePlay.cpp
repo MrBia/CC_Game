@@ -53,6 +53,7 @@ void GamePlay::update(float deltaTime)
 	// update zombie
 	for (int i = 0; i < zombies.size(); i++) {
 		(zombies.at(i))->Update(deltaTime);
+		(zombies.at(i))->startAI(knight);
 	}
 
 	// update dragon

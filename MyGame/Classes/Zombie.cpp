@@ -6,7 +6,7 @@ void Zombie::Init()
 {
 	this->setSprite(Sprite::create("Zombie/zombie_1_1.png"));
 	layer->addChild(this->getSprite());
-	this->getSprite()->setAnchorPoint(Vec2(0.5, 0));
+	this->getSprite()->setAnchorPoint(Vec2(1, 0));
 	this->setBlood(BLOOD);
 
 
@@ -55,6 +55,11 @@ void Zombie::Init()
 	ani_Die.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("zombie_3_4.png"));
 	ani_Die.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("zombie_3_5.png"));
 
+	// start
+	Vector<SpriteFrame*> ani_Start;
+	ani_Start.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("zombie_1_1.png"));
+	ani_Start.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName("zombie_1_2.png"));
+
 	// animation
 	auto animation = Animation::createWithSpriteFrames(ani_Fight_1, 0.2f);
 	animationFight_1 = Animate::create(animation);
@@ -62,11 +67,14 @@ void Zombie::Init()
 	animationFight_2 = Animate::create(animation);
 	animation = Animation::createWithSpriteFrames(ani_Die, 0.2f);
 	animationDie = Animate::create(animation);
+	animation = Animation::createWithSpriteFrames(ani_Start, 0.2f);
+	animationStart = Animate::create(animation);
 
 	// retain
 	animationFight_1->retain();
 	animationFight_2->retain();
 	animationDie->retain();
+	animationStart->retain();
 
 
 	// create blood bar
@@ -82,21 +90,42 @@ void Zombie::Update(float deltaTime)
 
 void Zombie::startAI(Objject* knight)
 {
-	setState(stateZombie::Z_START);
+	setState(currentState);
+	float dis = distance(this, knight);
+
+	if (this->getBlood() > 0) {
+		life = true;
+	}
+	else {
+		life = false;
+	}
+
+	if (life) {
+		if (dis < DISTANCE_FIGHT_Z) {
+			if (this->getBlood() > 90) {
+				normalFight();
+			}
+			else {
+				skillFight();
+			}
+		}
+		else {
+			setState(stateZombie::Z_START);
+		}
+	}
+	else {
+		die();
+	}
 }
 
 void Zombie::normalFight()
 {
-	if (currentState != stateZombie::SKILL_FIGHT && currentState != stateZombie::DIE) {
-		setState(stateZombie::NORMAL_FIGHT);
-	}
+	setState(stateZombie::NORMAL_FIGHT);
 }
 
 void Zombie::skillFight()
 {
-	if (currentState != stateZombie::NORMAL_FIGHT && currentState != stateZombie::DIE) {
-		setState(stateZombie::SKILL_FIGHT);
-	}
+	setState(stateZombie::SKILL_FIGHT);
 }
 
 void Zombie::die()
@@ -109,8 +138,12 @@ void Zombie::setState(int nextState)
 	switch (nextState)
 	{
 	case stateZombie::Z_START: {
-		if (this->getSprite()->getNumberOfRunningActions() == 0) {
-			//this->getSprite()->runAction()
+		if (nextState != currentState) {
+			this->getSprite()->stopAllActions();
+			this->getSprite()->runAction(animationStart);
+		}
+		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
+			this->getSprite()->runAction(animationStart);
 		}
 		break;
 	}
@@ -137,7 +170,11 @@ void Zombie::setState(int nextState)
 	case stateZombie::DIE: {
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
-			this->getSprite()->runAction(animationFight_1);
+			this->getSprite()->runAction(animationDie);
+		}
+		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
+			this->getSprite()->setVisible(false);
+			this->getSprite()->getPhysicsBody()->setEnabled(false);
 		}
 		break;
 	}
@@ -161,6 +198,16 @@ void Zombie::createBloodBar()
 	// set scale
 	bloodbg->setScale(SCALE_BLOOD_BAR);
 	blood->setScale(SCALE_BLOOD_BAR);
+}
+
+float Zombie::distance(Objject * zombie, Objject * knight)
+{
+	Vec2 posZB = zombie->getSprite()->getPosition();
+	Vec2 posKN = knight->getSprite()->getPosition();
+
+	float dis = sqrt((posZB.x - posKN.x)*(posZB.x - posKN.x) + (posZB.y - posKN.y)*(posZB.y - posKN.y));
+
+	return dis;
 }
 
 Zombie::Zombie(Layer* layer, int index)
