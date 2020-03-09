@@ -251,6 +251,16 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 		}
 	}
 
+	// fire of zombie vs knight
+	if ((nodeA->getCollisionBitmask() == FIRE_TAG_Z && nodeB->getCollisionBitmask() == KNIGHT_TAG) || (nodeA->getCollisionBitmask() == KNIGHT_TAG && nodeB->getCollisionBitmask() == FIRE_TAG_Z)) {
+		if (nodeA->getCollisionBitmask() == KNIGHT_TAG) {
+			knight->setBlood(knight->getBlood() - 10);
+		}
+		else if (nodeB->getCollisionBitmask() == KNIGHT_TAG) {
+			knight->setBlood(knight->getBlood() - 10);
+		}
+	}
+
 	return false;
 }
 

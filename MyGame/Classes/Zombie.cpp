@@ -79,6 +79,19 @@ void Zombie::Init()
 
 	// create blood bar
 	createBloodBar();
+
+	// create fire
+	fire = Sprite::create();
+	this->layer->addChild(fire);
+	fire->setPosition(Vec2(500, 500));
+
+	auto physics = PhysicsBody::createBox(Size(30, 30));
+	physics->setDynamic(false);
+	physics->setRotationEnable(false);
+	physics->setGravityEnable(false);
+	physics->setContactTestBitmask(1);
+	physics->setCollisionBitmask(FIRE_TAG_Z);
+	fire->setPhysicsBody(physics);
 }
 
 void Zombie::Update(float deltaTime)
@@ -102,6 +115,15 @@ void Zombie::startAI(Objject* knight)
 
 	if (life) {
 		if (dis < DISTANCE_FIGHT_Z) {
+			if (this->getSprite()->getPosition().x > knight->getSprite()->getPosition().x) {
+				this->getSprite()->setFlippedX(false);
+				isLeft = true;
+			}
+			else {
+				this->getSprite()->setFlippedX(true);
+				isLeft = false;
+			}
+
 			if (this->getBlood() > 90) {
 				normalFight();
 			}
@@ -151,9 +173,35 @@ void Zombie::setState(int nextState)
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
 			this->getSprite()->runAction(animationFight_1);
+
+			fire->setPosition(this->getSprite()->getPosition());
+
+			if (isLeft) {
+				moveBy = MoveBy::create(0.3, Vec2(-120, 0));
+			}
+			else {
+				moveBy = MoveBy::create(0.3, Vec2(120, 0));
+			}
+
+			auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
+			auto sequence = Sequence::create(moveBy, moveTo, nullptr);
+			fire->runAction(sequence);
 		}
 		else if (this->getSprite()->getNumberOfRunningActions() == 0){
 			this->getSprite()->runAction(animationFight_1);
+
+			fire->setPosition(this->getSprite()->getPosition());
+
+			if (isLeft) {
+				moveBy = MoveBy::create(0.3, Vec2(-120, 0));
+			}
+			else {
+				moveBy = MoveBy::create(0.3, Vec2(120, 0));
+			}
+
+			auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
+			auto sequence = Sequence::create(moveBy, moveTo, nullptr);
+			fire->runAction(sequence);
 		}
 		break;
 	}
@@ -161,9 +209,35 @@ void Zombie::setState(int nextState)
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
 			this->getSprite()->runAction(animationFight_2);
+
+			fire->setPosition(this->getSprite()->getPosition());
+
+			if (isLeft) {
+				moveBy = MoveBy::create(0.3, Vec2(-120, 0));
+			}
+			else {
+				moveBy = MoveBy::create(0.3, Vec2(120, 0));
+			}
+
+			auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
+			auto sequence = Sequence::create(moveBy, moveTo, nullptr);
+			fire->runAction(sequence);
 		}
 		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
 			this->getSprite()->runAction(animationFight_2);
+
+			fire->setPosition(this->getSprite()->getPosition());
+
+			if (isLeft) {
+				moveBy = MoveBy::create(0.3, Vec2(-120, 0));
+			}
+			else {
+				moveBy = MoveBy::create(0.3, Vec2(120, 0));
+			}
+
+			auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
+			auto sequence = Sequence::create(moveBy, moveTo, nullptr);
+			fire->runAction(sequence);
 		}
 		break;
 	}

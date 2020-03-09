@@ -7,7 +7,7 @@
 
 // define Zombie
 #define DISTANCE_FIGHT_Z 300 
-
+#define FIRE_TAG_Z 60
 
 // define Dragon
 #define DISTANCE_FIGHT_D 300 

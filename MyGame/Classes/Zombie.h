@@ -21,6 +21,9 @@ private:
 	cocos2d::ui::LoadingBar* bloodbg;
 	cocos2d::ui::LoadingBar* blood;
 	bool life = true;
+	Sprite* fire;
+	bool isLeft = true;
+	MoveBy* moveBy;
 public:
 	void Init();
 	void Update(float deltaTime);
