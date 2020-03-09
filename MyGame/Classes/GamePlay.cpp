@@ -38,7 +38,7 @@ bool GamePlay::init()
 	// update 
 	scheduleUpdate();
 
-
+	auto count = new CountTime(this, 20); // update
 	return true;
 }
 
@@ -61,6 +61,8 @@ void GamePlay::update(float deltaTime)
 		(dragons.at(i))->Update(deltaTime);
 		(dragons.at(i))->startAI(knight);
 	}
+
+	log("%i", btnFire->getOpacity());
 }
 
 void GamePlay::createMap()
@@ -305,7 +307,8 @@ void GamePlay::createJoystick(Layer* layer)
 	btnFire->setPosition(Vec2(900, 100));
 	btnFire->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fire, this));
 	layerr->addChild(btnFire);
-
+	btnFire->setOpacity(100);
+	
 	layer->addChild(layerr);
 }
 

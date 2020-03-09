@@ -25,6 +25,7 @@ private:
 	cocos2d::ui::LoadingBar* blood;
 	bool isLeft = false;
 	MoveBy* moveBy;
+	int damaged;
 public:
 	void Init();
 	void Update(float deltaTime);
