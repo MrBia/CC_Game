@@ -38,7 +38,6 @@ bool GamePlay::init()
 	// update 
 	scheduleUpdate();
 
-	auto count = new CountTime(this, 20); // update
 	return true;
 }
 
@@ -61,8 +60,6 @@ void GamePlay::update(float deltaTime)
 		(dragons.at(i))->Update(deltaTime);
 		(dragons.at(i))->startAI(knight);
 	}
-
-	log("%i", btnFire->getOpacity());
 }
 
 void GamePlay::createMap()
@@ -198,12 +195,27 @@ void GamePlay::createPhysic()
 
 void GamePlay::Fight(Ref* sender, Widget::TouchEventType type) // co tham so ham CALLBACK ko loi
 {
-	((Knight*)(knight))->fight();
+	if (allowFight) {
+		((Knight*)(knight))->fight();
+	}
+	else {
+		countNormalFight = new CountTime(layerr, 10, btnFight->getPosition(), btnFight->getContentSize());
+		
+		btnFight->setOpacity(100);
+	}
+	
 }
 
 void GamePlay::Fire(Ref * sender, Widget::TouchEventType type)
 {
-	((Knight*)(knight))->skill();
+	if (allowFire) {
+		((Knight*)(knight))->skill();
+	}
+	else {
+		countSkillFight = new CountTime(layerr, 10, btnFire->getPosition(), btnFire->getContentSize());
+		btnFire->setOpacity(100);
+	}
+	
 }
 
 bool GamePlay::onContactBegin(PhysicsContact & contact)
@@ -299,12 +311,14 @@ void GamePlay::createJoystick(Layer* layer)
 	// btn fight
 	btnFight = ui::Button::create("Joystick/hammer_normal.png", "Joystick/hammer_pressed.png");
 	btnFight->setPosition(Vec2(800, 100));
+	allowFight = false;
 	btnFight->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fight, this));
 	layerr->addChild(btnFight);
 
 	// btn Fire
 	btnFire = ui::Button::create("Joystick/fire_normal.png", "Joystick/fire_press.png");
 	btnFire->setPosition(Vec2(900, 100));
+	allowFire = false;
 	btnFire->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fire, this));
 	layerr->addChild(btnFire);
 	btnFire->setOpacity(100);

@@ -43,7 +43,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Soul.cpp" />
-    <ClCompile Include="CountTime.cpp" />
+    <ClCompile Include="CountTime.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -80,7 +82,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Soul.h" />
-    <ClInclude Include="..\Classes\CountTime.h" />
+    <ClInclude Include="..\Classes\CountTime.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

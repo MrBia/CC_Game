@@ -39,7 +39,13 @@ private:
 	// joystick
 	Layer* layerr;
 	ui::Button* btnFight;
+	bool allowFight;
 	ui::Button* btnFire;
+	bool allowFire;
+
+	// counttime
+	CountTime* countNormalFight;
+	CountTime* countSkillFight;
 public:
 	static Scene* createGame();
 	virtual bool init();
