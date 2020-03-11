@@ -46,6 +46,8 @@ private:
 	// counttime
 	CountTime* countNormalFight;
 	CountTime* countSkillFight;
+	bool isNormal = true;
+	bool isSkill = true;
 public:
 	static Scene* createGame();
 	virtual bool init();

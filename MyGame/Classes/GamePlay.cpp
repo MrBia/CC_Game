@@ -60,6 +60,36 @@ void GamePlay::update(float deltaTime)
 		(dragons.at(i))->Update(deltaTime);
 		(dragons.at(i))->startAI(knight);
 	}
+
+	// update countTime
+	if (!allowFight) {
+		if (isNormal) {
+			countNormalFight = new CountTime(layerr, 10, btnFight->getPosition(), btnFight->getContentSize());
+			isNormal = false;
+		}
+
+		if(!isNormal) countNormalFight->Update(deltaTime);
+
+		if ((CountTime*)(countNormalFight)->getTimeRemain() <= 0) {
+			allowFight = true;
+			btnFight->setOpacity(255);
+			isNormal = true;
+		}
+	}
+	if (!allowFire) {
+		if (isSkill) {
+			countSkillFight = new CountTime(layerr, 10, btnFire->getPosition(), btnFire->getContentSize());
+			isSkill = false;
+		}
+
+		if(!isSkill) countSkillFight->Update(deltaTime);
+
+		if ((CountTime*)(countSkillFight)->getTimeRemain() <= 0) {
+			allowFire = true;
+			btnFire->setOpacity(255);
+			isSkill = true;
+		}
+	}
 }
 
 void GamePlay::createMap()
@@ -197,25 +227,18 @@ void GamePlay::Fight(Ref* sender, Widget::TouchEventType type) // co tham so ham
 {
 	if (allowFight) {
 		((Knight*)(knight))->fight();
-	}
-	else {
-		countNormalFight = new CountTime(layerr, 10, btnFight->getPosition(), btnFight->getContentSize());
-		
+		allowFight = false;
 		btnFight->setOpacity(100);
 	}
-	
 }
 
 void GamePlay::Fire(Ref * sender, Widget::TouchEventType type)
 {
 	if (allowFire) {
 		((Knight*)(knight))->skill();
-	}
-	else {
-		countSkillFight = new CountTime(layerr, 10, btnFire->getPosition(), btnFire->getContentSize());
+		allowFire = false;
 		btnFire->setOpacity(100);
 	}
-	
 }
 
 bool GamePlay::onContactBegin(PhysicsContact & contact)
