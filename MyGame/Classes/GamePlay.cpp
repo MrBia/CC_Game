@@ -334,17 +334,18 @@ void GamePlay::createJoystick(Layer* layer)
 	// btn fight
 	btnFight = ui::Button::create("Joystick/hammer_normal.png", "Joystick/hammer_pressed.png");
 	btnFight->setPosition(Vec2(800, 100));
-	allowFight = false;
+	allowFight = true;
 	btnFight->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fight, this));
 	layerr->addChild(btnFight);
+	btnFight->setOpacity(255);
 
 	// btn Fire
 	btnFire = ui::Button::create("Joystick/fire_normal.png", "Joystick/fire_press.png");
 	btnFire->setPosition(Vec2(900, 100));
-	allowFire = false;
+	allowFire = true;
 	btnFire->addTouchEventListener(CC_CALLBACK_2(GamePlay::Fire, this));
 	layerr->addChild(btnFire);
-	btnFire->setOpacity(100);
+	btnFire->setOpacity(255);
 	
 	layer->addChild(layerr);
 }

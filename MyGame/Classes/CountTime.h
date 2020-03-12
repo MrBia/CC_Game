@@ -8,6 +8,7 @@ private:
 	Label* labelTimer;
 	Vec2 pos;
 	Size size;
+	ProgressTimer* countTimer;
 public:
 	void Init();
 	void Update(float deltaTime);

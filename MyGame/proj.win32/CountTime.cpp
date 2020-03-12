@@ -6,7 +6,7 @@ void CountTime::Init()
 {
 	this->setSprite(Sprite::create("CountTime/circle.png"));
 	this->getSprite()->setContentSize(size - Size(15, 15));
-	auto countTimer = ProgressTimer::create(this->getSprite());
+	countTimer = ProgressTimer::create(this->getSprite());
 	countTimer->setType(ProgressTimer::Type::RADIAL);
 	countTimer->setPosition(pos);
 	countTimer->setPercentage(100);
@@ -24,15 +24,17 @@ void CountTime::Init()
 
 void CountTime::Update(float deltaTime)
 {
-	static float i = 0;
-	i += deltaTime;
-	if (i >= 1 && timeRemain > 0) {
-		timeRemain--;
-		i = 0;
+	int percent = (int)countTimer->getPercentage();
+	int afterTimeRemain = timeRemain*percent / 100;
+	
+	if (afterTimeRemain <= 0) {
+		labelTimer->setString("");
+		timeRemain = 0;
 	}
-
-	CCString* timer = CCString::createWithFormat("%i", timeRemain);
-	labelTimer->setString(timer->getCString());
+	else {
+		CCString* timer = CCString::createWithFormat("%i", afterTimeRemain);
+		labelTimer->setString(timer->getCString());
+	}
 }
 
 void CountTime::startAI(Objject * knight)
