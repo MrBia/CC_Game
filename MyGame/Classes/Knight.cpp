@@ -105,7 +105,7 @@ void Knight::Init()
 	// create fire
 	fire = Sprite::create("Fire/fire_alone.png");
 	this->layer->addChild(fire);
-	fire->setPosition(Vec2(-100, -100));
+	fire->setPosition(Vec2(-500, -500));
 
 	auto physics = PhysicsBody::createBox(fire->getContentSize());
 	physics->setDynamic(true);
@@ -115,6 +115,19 @@ void Knight::Init()
 	physics->setCollisionBitmask(FIRE_TAG);
 	fire->setPhysicsBody(physics);
 	fire->setTag(FIRE_TAG);
+
+	// create fight
+	fight_damage = Sprite::create();
+	this->layer->addChild(fight_damage);
+	fight_damage->setPosition(Vec2(-500, -500));
+
+	auto physics_fight_damage = PhysicsBody::createBox(Size(50, 50));
+	physics_fight_damage->setDynamic(true);
+	physics_fight_damage->setRotationEnable(false);
+	physics_fight_damage->setGravityEnable(false);
+	physics_fight_damage->setContactTestBitmask(1);
+	physics_fight_damage->setCollisionBitmask(FIGHT_TAG);
+	fight_damage->setPhysicsBody(physics_fight_damage);
 
 	// create blood bar
 	createBloodBar();
@@ -199,9 +212,16 @@ void Knight::setState(int nextState)
 		if (nextState != currentState) {
 			this->getSprite()->stopAllActions();
 			this->getSprite()->runAction(aniFight);
-		}
-		else if (this->getSprite()->getNumberOfRunningActions() == 0) {
-			this->getSprite()->runAction(aniFight);
+
+			if (fight_damage->getNumberOfRunningActions() == 0) {
+				fight_damage->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().width / 2));
+
+				if (!isLeft) moveBy_fight_damage = MoveBy::create(0.3, Vec2(250, 0));
+				else moveBy_fight_damage = MoveBy::create(0.3, Vec2(-250, 0));
+				auto moveTo = MoveTo::create(0.01, Vec2(-500, -500));
+				auto sequence = Sequence::create(moveBy_fight_damage, moveTo, nullptr);
+				fight_damage->runAction(sequence);
+			}
 		}
 		
 		break;

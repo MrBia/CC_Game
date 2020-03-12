@@ -64,7 +64,7 @@ void GamePlay::update(float deltaTime)
 	// update countTime
 	if (!allowFight) {
 		if (isNormal) {
-			countNormalFight = new CountTime(layerr, 10, btnFight->getPosition(), btnFight->getContentSize());
+			countNormalFight = new CountTime(layerr, 5, btnFight->getPosition(), btnFight->getContentSize());
 			isNormal = false;
 		}
 
@@ -78,7 +78,7 @@ void GamePlay::update(float deltaTime)
 	}
 	if (!allowFire) {
 		if (isSkill) {
-			countSkillFight = new CountTime(layerr, 10, btnFire->getPosition(), btnFire->getContentSize());
+			countSkillFight = new CountTime(layerr, 5, btnFire->getPosition(), btnFire->getContentSize());
 			isSkill = false;
 		}
 
@@ -270,6 +270,16 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 
 	// fire of knight vs zombie
 	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == ZOMBIE_TAG) || (nodeA->getCollisionBitmask() == ZOMBIE_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
+		if (nodeA->getCollisionBitmask() == ZOMBIE_TAG) {
+			zombies.at(nodeA->getGroup())->setBlood(zombies.at(nodeA->getGroup())->getBlood() - 10);
+		}
+		else if (nodeB->getCollisionBitmask() == ZOMBIE_TAG) {
+			zombies.at(nodeB->getGroup())->setBlood(zombies.at(nodeB->getGroup())->getBlood() - 10);
+		}
+	}
+
+	// fight of knight vs zombie
+	if ((nodeA->getCollisionBitmask() == FIGHT_TAG && nodeB->getCollisionBitmask() == ZOMBIE_TAG) || (nodeA->getCollisionBitmask() == ZOMBIE_TAG && nodeB->getCollisionBitmask() == FIGHT_TAG)) {
 		if (nodeA->getCollisionBitmask() == ZOMBIE_TAG) {
 			zombies.at(nodeA->getGroup())->setBlood(zombies.at(nodeA->getGroup())->getBlood() - 10);
 		}

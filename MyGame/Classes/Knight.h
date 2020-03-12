@@ -21,10 +21,12 @@ private:
 	Animate* aniFire;
 	int currentState;
 	Sprite* fire;
+	Sprite* fight_damage;
 	cocos2d::ui::LoadingBar* bloodbg;
 	cocos2d::ui::LoadingBar* blood;
 	bool isLeft = false;
 	MoveBy* moveBy;
+	MoveBy* moveBy_fight_damage;
 	int damaged;
 public:
 	void Init();
