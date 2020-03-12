@@ -6,7 +6,8 @@ enum state {
 	GO,
 	RUN,
 	FIGHT,
-	K_SKILL
+	K_SKILL,
+	K_DIE
 };
 
 class Knight :
@@ -28,6 +29,7 @@ private:
 	MoveBy* moveBy;
 	MoveBy* moveBy_fight_damage;
 	int damaged;
+	bool life = true;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -37,6 +39,7 @@ public:
 	void skill();
 	void go();
 	void run();
+	void die();
 	void setState(int nextState);
 	void createBloodBar();
 	void IsLeft(bool isLeft);

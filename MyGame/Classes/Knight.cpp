@@ -138,6 +138,17 @@ void Knight::Update(float deltaTime)
 	bloodbg->setPosition(this->getSprite()->getPosition() + Vec2(0, this->getSprite()->getContentSize().height));
 	blood->setPosition(bloodbg->getPosition());
 	blood->setPercent(this->getBlood());
+
+	if (this->getBlood() <= 0) {
+		life = false;
+	}
+
+	if (!life) {
+		die();
+		startAI(this);
+		this->setBlood(BLOOD);
+		life = true;
+	}
 }
 
 Knight::Knight(Layer* layer)
@@ -173,6 +184,11 @@ void Knight::go()
 void Knight::run()
 {
 	setState(state::RUN);
+}
+
+void Knight::die()
+{
+	setState(state::K_DIE);
 }
 
 void Knight::setState(int nextState)
@@ -241,6 +257,18 @@ void Knight::setState(int nextState)
 				fire->runAction(sequence);
 			
 			}
+		}
+
+		break;
+	}
+	case state::K_DIE: {
+		if (currentState != nextState) {
+			this->getSprite()->stopAllActions();
+			auto fadeTo = FadeTo::create(1.0, 10);
+			auto moveTo = MoveTo::create(0.01, Vec2(100, 100));
+			auto fadeUp = FadeTo::create(1.0, 255);
+			auto sequence = Sequence::create(fadeTo, moveTo, fadeUp, nullptr);
+			this->getSprite()->runAction(sequence);
 		}
 
 		break;
