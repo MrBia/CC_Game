@@ -288,6 +288,16 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 		}
 	}
 
+	// fight of knight vs dragon
+	if ((nodeA->getCollisionBitmask() == FIGHT_TAG && nodeB->getCollisionBitmask() == DRAGON_TAG) || (nodeA->getCollisionBitmask() == DRAGON_TAG && nodeB->getCollisionBitmask() == FIGHT_TAG)) {
+		if (nodeA->getCollisionBitmask() == DRAGON_TAG) {
+			dragons.at(nodeA->getGroup())->setBlood(dragons.at(nodeA->getGroup())->getBlood() - 10);
+		}
+		else if (nodeB->getCollisionBitmask() == DRAGON_TAG) {
+			dragons.at(nodeB->getGroup())->setBlood(dragons.at(nodeB->getGroup())->getBlood() - 10);
+		}
+	}
+
 	// fire of dragon vs knight
 	if ((nodeA->getCollisionBitmask() == FIRE_TAG_D && nodeB->getCollisionBitmask() == KNIGHT_TAG) || (nodeA->getCollisionBitmask() == KNIGHT_TAG && nodeB->getCollisionBitmask() == FIRE_TAG_D)) {
 		if (nodeA->getCollisionBitmask() == KNIGHT_TAG) {
