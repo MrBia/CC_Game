@@ -23,4 +23,8 @@
 // define blood bar
 #define SCALE_BLOOD_BAR 0.2f
 
+// define money
+#define MONEY_DRAGON 10
+#define MONEY_ZOMBIE 5
+
 #endif // !DEFINE_H_

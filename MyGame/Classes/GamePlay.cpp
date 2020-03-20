@@ -70,7 +70,7 @@ void GamePlay::update(float deltaTime)
 
 		if(!isNormal) countNormalFight->Update(deltaTime);
 
-		if ((CountTime*)(countNormalFight)->getTimeRemain() <= 0) {
+		if (((CountTime*)(countNormalFight))->getTimeRemain() <= 0) {
 			allowFight = true;
 			btnFight->setOpacity(255);
 			isNormal = true;
@@ -84,7 +84,7 @@ void GamePlay::update(float deltaTime)
 
 		if(!isSkill) countSkillFight->Update(deltaTime);
 
-		if ((CountTime*)(countSkillFight)->getTimeRemain() <= 0) {
+		if (((CountTime*)(countSkillFight))->getTimeRemain() <= 0) {
 			allowFire = true;
 			btnFire->setOpacity(255);
 			isSkill = true;
@@ -256,6 +256,11 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 				soul->getSprite()->setPosition(dragons.at(nodeA->getGroup())->getSprite()->getPosition());
 				soul->getSprite()->runAction(moveTo);*/
 			}
+
+			// if dragon die -> knight receive money
+			if (dragons.at(nodeA->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_DRAGON);
+			}
 		}
 		else if (nodeB->getCollisionBitmask() == DRAGON_TAG) {
 			dragons.at(nodeB->getGroup())->setBlood(dragons.at(nodeB->getGroup())->getBlood() - 10);
@@ -265,6 +270,11 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 				soul->getSprite()->setPosition(dragons.at(nodeB->getGroup())->getSprite()->getPosition());
 				soul->getSprite()->runAction(moveTo);*/
 			}
+
+			// if dragon die -> knight receive money
+			if (dragons.at(nodeB->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_DRAGON);
+			}
 		}
 	}
 
@@ -272,9 +282,19 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 	if ((nodeA->getCollisionBitmask() == FIRE_TAG && nodeB->getCollisionBitmask() == ZOMBIE_TAG) || (nodeA->getCollisionBitmask() == ZOMBIE_TAG && nodeB->getCollisionBitmask() == FIRE_TAG)) {
 		if (nodeA->getCollisionBitmask() == ZOMBIE_TAG) {
 			zombies.at(nodeA->getGroup())->setBlood(zombies.at(nodeA->getGroup())->getBlood() - 10);
+
+			// if zombie die -> knight receive money
+			if (zombies.at(nodeA->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_ZOMBIE);
+			}
 		}
 		else if (nodeB->getCollisionBitmask() == ZOMBIE_TAG) {
 			zombies.at(nodeB->getGroup())->setBlood(zombies.at(nodeB->getGroup())->getBlood() - 10);
+
+			// if zombie die -> knight receive money
+			if (zombies.at(nodeB->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_ZOMBIE);
+			}
 		}
 	}
 
@@ -282,9 +302,19 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 	if ((nodeA->getCollisionBitmask() == FIGHT_TAG && nodeB->getCollisionBitmask() == ZOMBIE_TAG) || (nodeA->getCollisionBitmask() == ZOMBIE_TAG && nodeB->getCollisionBitmask() == FIGHT_TAG)) {
 		if (nodeA->getCollisionBitmask() == ZOMBIE_TAG) {
 			zombies.at(nodeA->getGroup())->setBlood(zombies.at(nodeA->getGroup())->getBlood() - 10);
+
+			// if zombie die -> knight receive money
+			if (zombies.at(nodeA->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_ZOMBIE);
+			}
 		}
 		else if (nodeB->getCollisionBitmask() == ZOMBIE_TAG) {
 			zombies.at(nodeB->getGroup())->setBlood(zombies.at(nodeB->getGroup())->getBlood() - 10);
+
+			// if zombie die -> knight receive money
+			if (zombies.at(nodeB->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_ZOMBIE);
+			}
 		}
 	}
 
@@ -292,9 +322,19 @@ bool GamePlay::onContactBegin(PhysicsContact & contact)
 	if ((nodeA->getCollisionBitmask() == FIGHT_TAG && nodeB->getCollisionBitmask() == DRAGON_TAG) || (nodeA->getCollisionBitmask() == DRAGON_TAG && nodeB->getCollisionBitmask() == FIGHT_TAG)) {
 		if (nodeA->getCollisionBitmask() == DRAGON_TAG) {
 			dragons.at(nodeA->getGroup())->setBlood(dragons.at(nodeA->getGroup())->getBlood() - 10);
+
+			// if dragon die -> knight receive money
+			if (dragons.at(nodeA->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_DRAGON);
+			}
 		}
 		else if (nodeB->getCollisionBitmask() == DRAGON_TAG) {
 			dragons.at(nodeB->getGroup())->setBlood(dragons.at(nodeB->getGroup())->getBlood() - 10);
+
+			// if dragon die -> knight receive money
+			if (dragons.at(nodeB->getGroup())->getBlood() <= 0) {
+				((Knight*)(knight))->setMoney(MONEY_DRAGON);
+			}
 		}
 	}
 

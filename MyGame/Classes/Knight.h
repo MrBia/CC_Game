@@ -30,6 +30,7 @@ private:
 	MoveBy* moveBy_fight_damage;
 	int damaged;
 	bool life = true;
+	int totalMoney;
 public:
 	void Init();
 	void Update(float deltaTime);
@@ -43,6 +44,8 @@ public:
 	void setState(int nextState);
 	void createBloodBar();
 	void IsLeft(bool isLeft);
+	void setMoney(int money);
+	int getMoney();
 
 	~Knight();
 };

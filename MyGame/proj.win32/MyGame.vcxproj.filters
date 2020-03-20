@@ -42,8 +42,10 @@
     <ClCompile Include="..\Classes\Zombie.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Soul.cpp" />
-    <ClCompile Include="CountTime.cpp">
+    <ClCompile Include="..\Classes\Soul.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CountTime.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,8 +83,10 @@
     <ClInclude Include="..\Classes\Zombie.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Soul.h" />
     <ClInclude Include="..\Classes\CountTime.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Soul.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,18 +1,19 @@
-#include "..\Classes\CountTime.h"
+#include "CountTime.h"
 
 
 
 void CountTime::Init()
 {
 	this->setSprite(Sprite::create("CountTime/circle.png"));
-	auto countTimer = ProgressTimer::create(this->getSprite());
+	this->getSprite()->setContentSize(size - Size(15, 15));
+	countTimer = ProgressTimer::create(this->getSprite());
 	countTimer->setType(ProgressTimer::Type::RADIAL);
+	countTimer->setPosition(pos);
 	countTimer->setPercentage(100);
 	countTimer->setReverseProgress(true);
 	countTimer->runAction(ProgressTo::create(timeRemain, 0));
 	this->layer->addChild(countTimer);
 	this->getSprite()->retain();
-	this->getSprite()->setPosition(100, 100);
 
 	CCString* timer = CCString::createWithFormat("%i", timeRemain);
 	labelTimer = Label::createWithTTF(timer->getCString(), "fonts/Marker Felt.ttf", 30);
@@ -23,25 +24,34 @@ void CountTime::Init()
 
 void CountTime::Update(float deltaTime)
 {
-	static float i = 0;
-	i += deltaTime;
-	if (i >= 1) {
-		timeRemain--;
-		i = 0;
+	int percent = (int)countTimer->getPercentage();
+	int afterTimeRemain = timeRemain*percent / 100;
+	
+	if (afterTimeRemain <= 0) {
+		labelTimer->setString("");
+		timeRemain = 0;
 	}
-
-	CCString* timer = CCString::createWithFormat("%i", timeRemain);
-	labelTimer->setString(timer->getCString());
+	else {
+		CCString* timer = CCString::createWithFormat("%i", afterTimeRemain);
+		labelTimer->setString(timer->getCString());
+	}
 }
 
 void CountTime::startAI(Objject * knight)
 {
 }
 
-CountTime::CountTime(Layer* layer, int timeRemain)
+int CountTime::getTimeRemain()
+{
+	return timeRemain;
+}
+
+CountTime::CountTime(Layer* layer, int timeRemain, Vec2 pos, Size size)
 {
 	this->layer = layer;
 	this->timeRemain = timeRemain;
+	this->pos = pos;
+	this->size = size;
 	Init();
 }
 

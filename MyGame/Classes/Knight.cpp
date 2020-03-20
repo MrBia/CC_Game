@@ -9,6 +9,7 @@ void Knight::Init()
 	this->getSprite()->setAnchorPoint(Vec2(0.5, 0));
 	this->getSprite()->setPosition(100, 100);
 	this->setBlood(BLOOD);
+	this->totalMoney = 0;
 
 	auto physic = PhysicsBody::createBox(this->getSprite()->getContentSize());
 	physic->setDynamic(false);
@@ -298,6 +299,16 @@ void Knight::createBloodBar()
 void Knight::IsLeft(bool isLeft)
 {
 	this->isLeft = isLeft;
+}
+
+void Knight::setMoney(int money)
+{
+	this->totalMoney += money;
+}
+
+int Knight::getMoney()
+{
+	return this->totalMoney;
 }
 
 Knight::~Knight()
